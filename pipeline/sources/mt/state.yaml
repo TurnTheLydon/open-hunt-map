@@ -1,0 +1,4 @@
+name: Montana
+# Review the data terms (https://msl.mt.gov/geoinfo/msdi/cadastral/) before enabling.
+enabled: false
+bbox: [-116.05, 44.36, -104.04, 49.0]

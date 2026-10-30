@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+
+# Pipeline output and downloads (rebuilt from sources, never committed)
+data/
+apps/web/public/tiles/
+
+# Local CLI tools (pmtiles, tippecanoe builds)
+.tools/
+
+.env
+.env.local
+.vercel/

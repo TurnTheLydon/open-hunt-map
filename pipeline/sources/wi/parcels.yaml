@@ -1,0 +1,23 @@
+# Wisconsin Statewide Parcel Map Database, V12 (2026 release, 2025 tax roll), ~3.57M parcels.
+kind: parcels
+name: Wisconsin parcels
+type: arcgis
+url: https://services3.arcgis.com/n6uYoouQZW75n5WI/ArcGIS/rest/services/Wisconsin_Statewide_Parcels_DB/FeatureServer/0
+schedule: yearly
+counties: all
+countyField: CONAME
+attribution: Wisconsin Statewide Parcel Map Initiative (V12)
+license: Free; the State Cartographer's Office asks users to fill out a feedback form
+terms: https://www.sco.wisc.edu/parcels/data/
+idField: OBJECTID
+fields:
+  parcel_id: PARCELID
+  owner: OWNERNME1
+  owner2: OWNERNME2
+  mail_address: PSTLADRESS
+  site_address: "{SITEADRESS}, {PLACENAME}"
+  acres: GISACRES
+  total_value: CNTASSDVALUE
+  land_value: LNDVALUE
+  use: PROPCLASS
+  county: CONAME

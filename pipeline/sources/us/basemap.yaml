@@ -1,0 +1,13 @@
+# OpenStreetMap basemap from the Protomaps daily planet build, cut to the bounding boxes
+# of every enabled state with the pmtiles CLI (https://github.com/protomaps/go-pmtiles).
+# Override locally with --bbox=w,s,e,n; without the CLI, tiles are fetched one by one.
+kind: basemap
+name: Basemap (OpenStreetMap)
+type: protomaps
+builds: https://build-metadata.protomaps.dev/builds.json
+buildUrl: https://build.protomaps.com/{key}
+schedule: monthly
+maxzoom: 15
+attribution: © OpenStreetMap contributors, Protomaps
+license: ODbL
+terms: https://www.openstreetmap.org/copyright

@@ -1,0 +1,29 @@
+# NC statewide parcels, standardized by NC OneMap from all 100 county data producers.
+# The old host (services.nconemap.gov) serves a *.gis.nc.gov certificate; use the new one.
+kind: parcels
+name: North Carolina parcels
+type: arcgis
+url: https://services.gis.nc.gov/secure/rest/services/NC1Map_Parcels/MapServer/1
+schedule: weekly
+# One paged query per county, several counties at a time. "all" reads the county list
+# from the service; override locally with --counties=Carteret.
+counties: all
+countyField: cntyname
+attribution: NC OneMap parcels
+license: Free download; NC OneMap disclaimer applies. Not a survey.
+terms: https://it.nc.gov/documents/gicc/gicc-nconemap-disclaimer-20220511pdf/open
+idField: objectid
+# Shared parcel schema (see pipeline/README.md). "{a}, {b}" joins source fields; empty parts are dropped.
+fields:
+  parcel_id: parno
+  owner: ownname
+  owner2: ownname2
+  mail_address: "{mailadd}, {mcity} {mstate} {mzip}"
+  site_address: "{siteadd}, {scity}"
+  acres: gisacres
+  total_value: parval
+  land_value: landval
+  use: parusedesc
+  legal: legdecfull
+  sale_date: saledatetx
+  county: cntyname

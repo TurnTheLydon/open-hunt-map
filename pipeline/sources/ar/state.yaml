@@ -1,0 +1,5 @@
+name: Arkansas
+# Review the data terms (https://gis.arkansas.gov/) before enabling. Coverage is partial in
+# some counties, and only parcels with a CAMA record are published.
+enabled: false
+bbox: [-94.62, 33.0, -89.64, 36.5]

@@ -1,0 +1,5 @@
+name: Virginia
+# Review the data terms (https://vgin.vdem.virginia.gov/) before enabling. VGIN parcels carry
+# boundaries and parcel IDs only, no owner names.
+enabled: false
+bbox: [-83.68, 36.54, -75.24, 39.47]

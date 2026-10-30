@@ -1,0 +1,114 @@
+# Rebuilds every enabled layer with tippecanoe and publishes to the tile bucket (R2/S3).
+# Each layer is its own job; the manifest job then points the app at the new files.
+#
+# Repository secrets: S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY
+name: Data pipeline
+
+on:
+  schedule:
+    - cron: '0 7 * * 1' # Mondays 07:00 UTC; NC parcels refresh weekly
+  workflow_dispatch:
+    inputs:
+      layers:
+        description: 'Layer ids, space-separated (blank = every enabled layer)'
+        required: false
+        default: ''
+      force:
+        description: 'Publish even if a layer shrank more than 10%'
+        type: boolean
+        default: false
+
+concurrency:
+  group: data-pipeline
+  cancel-in-progress: false
+
+env:
+  TIPPECANOE_VERSION: 2.79.0
+  PMTILES_VERSION: 1.31.2
+  S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+  S3_BUCKET: ${{ secrets.S3_BUCKET }}
+  S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+  S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      layers: ${{ steps.list.outputs.layers }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --workspace pipeline --include-workspace-root=false
+      - id: list
+        env:
+          LAYERS: ${{ inputs.layers }}
+        run: |
+          if [ -n "$LAYERS" ]; then
+            echo "layers=$(printf '%s' "$LAYERS" | jq -Rc 'split(" ") | map(select(test("^[a-z]+-[a-z]+$")))')" >> "$GITHUB_OUTPUT"
+          else
+            echo "layers=$(node pipeline/src/run.mjs --list)" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        layer: ${{ fromJson(needs.plan.outputs.layers) }}
+    steps:
+      - name: Free disk space (statewide parcels need ~20 GB of working space)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --workspace pipeline --include-workspace-root=false
+
+      - name: Cache tippecanoe
+        id: tippecanoe-cache
+        uses: actions/cache@v4
+        with:
+          path: .tools/tippecanoe
+          key: tippecanoe-${{ runner.os }}-${{ env.TIPPECANOE_VERSION }}
+      - name: Build tippecanoe
+        if: steps.tippecanoe-cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update && sudo apt-get install -y build-essential libsqlite3-dev zlib1g-dev
+          git clone --depth 1 --branch "$TIPPECANOE_VERSION" https://github.com/felt/tippecanoe.git /tmp/tippecanoe
+          make -C /tmp/tippecanoe -j"$(nproc)"
+          mkdir -p .tools/tippecanoe && cp /tmp/tippecanoe/tippecanoe .tools/tippecanoe/
+
+      - name: Install pmtiles CLI
+        run: |
+          mkdir -p .tools/pmtiles
+          curl -sSL "https://github.com/protomaps/go-pmtiles/releases/download/v${PMTILES_VERSION}/go-pmtiles_${PMTILES_VERSION}_Linux_x86_64.tar.gz" \
+            | tar -xz -C .tools/pmtiles pmtiles
+
+      - name: Build and publish ${{ matrix.layer }}
+        env:
+          LAYER: ${{ matrix.layer }}
+          FORCE: ${{ inputs.force && '--force' || '' }}
+        run: npm run pipeline -- "$LAYER" --no-manifest $FORCE
+
+  manifest:
+    needs: [plan, build]
+    # Publish whatever succeeded; a failed layer keeps serving its previous version.
+    if: always() && needs.plan.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --workspace pipeline --include-workspace-root=false
+      - run: npm run pipeline -- --manifest-only

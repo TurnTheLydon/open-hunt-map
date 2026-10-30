@@ -1,0 +1,225 @@
+:root {
+  --text: #1d211c;
+  --muted: #5d645a;
+  --bg: #fbfaf7;
+  --border: #dedbd2;
+  --accent: #b35c0c;
+  --warn: #c62828;
+  --shadow: rgba(0, 0, 0, 0.18) 0 6px 20px;
+  font: 15px/1.45 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #eceee9;
+    --muted: #a7ada3;
+    --bg: #1b1d1a;
+    --border: #393d36;
+    --accent: #f0943d;
+    --warn: #ff6b6b;
+  }
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+/* Two classes so it beats maplibre-gl.css's `.maplibregl-map { position: relative }`. */
+.map.maplibregl-map {
+  position: fixed;
+  inset: 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--accent);
+}
+
+.banner {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+
+/* Layer picker */
+.layers {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: var(--bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.layers-toggle {
+  border: 0;
+  background: none;
+  color: var(--text);
+  padding: 8px 14px;
+  font-weight: 600;
+}
+.layers ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 14px 10px;
+}
+.layers li {
+  padding: 6px 0;
+}
+.layers label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.layers small {
+  display: block;
+  margin-top: 2px;
+  margin-left: 26px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 2px solid;
+}
+.swatch-publicland {
+  background: rgba(76, 154, 91, 0.3);
+  border-color: #2f7340;
+}
+.swatch-gamelands {
+  background: rgba(224, 123, 26, 0.3);
+  border-color: #b35c0c;
+}
+.swatch-parcels {
+  background: transparent;
+  border-color: #7b3fa0;
+}
+
+/* Tap details: bottom sheet on phones, side panel on wide screens */
+.info {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 16px 16px 24px;
+  background: var(--bg);
+  border-radius: 14px 14px 0 0;
+  box-shadow: var(--shadow);
+}
+@media (min-width: 760px) {
+  .info {
+    left: auto;
+    top: 10px;
+    right: 56px;
+    bottom: auto;
+    width: 360px;
+    max-height: calc(100vh - 60px);
+    border-radius: 10px;
+  }
+}
+.info .close {
+  position: sticky;
+  top: 0;
+  float: right;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 24px;
+  line-height: 1;
+}
+.info > div + div {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.info h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.info .kind {
+  margin: 2px 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.info .kind.warn {
+  color: var(--warn);
+  font-weight: 600;
+}
+.info dl {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+.info dl div {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 8px;
+}
+.info dt {
+  color: var(--muted);
+}
+.info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.info .note,
+.info .source {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* First-launch disclaimer */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 10;
+}
+.modal {
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+.modal h2 {
+  margin: 0 0 8px;
+}
+.modal p {
+  margin: 0 0 10px;
+}
+.modal button {
+  margin-top: 6px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}

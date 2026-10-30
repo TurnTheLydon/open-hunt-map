@@ -1,0 +1,18 @@
+{
+  "name": "open-hunt-map",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "workspaces": [
+    "apps/web",
+    "pipeline"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/web --",
+    "build": "npm run build -w apps/web --",
+    "pipeline": "npm run run -w pipeline --",
+    "data:sample": "npm run pipeline -- parcels-nc --counties=Carteret,Craven --no-manifest && npm run pipeline -- gamelands-nc --no-manifest && npm run pipeline -- publicland-us basemap-us --bbox=-77.4,34.55,-76.0,35.35"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.67.2"
+  }
+}

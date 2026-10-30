@@ -1,0 +1,20 @@
+# USGS PAD-US public access layer (v4.1), nationwide (~306k areas).
+# Override locally with --bbox=w,s,e,n; the built-in tiler can't hold the whole country.
+kind: publicland
+name: Public land (PAD-US)
+type: arcgis
+url: https://services.arcgis.com/v01gqwM5QqNysAAi/ArcGIS/rest/services/PADUS_Public_Access/FeatureServer/0
+schedule: on-release
+attribution: USGS PAD-US 4.1
+license: Public domain
+terms: https://www.usgs.gov/core-science-systems/science-analytics-and-synthesis/gap/pad-us-data-history
+idField: OBJECTID
+fields:
+  name: Unit_Nm
+  # OA open, RA restricted, XA closed, UK unknown
+  access: Pub_Access
+  category: Category
+  manager_type: MngTp_Desc
+  manager: MngNm_Desc
+  designation: DesTp_Desc
+  acres: GIS_Acres

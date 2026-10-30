@@ -1,0 +1,23 @@
+# Montana Cadastral Framework (Montana State Library / Dept. of Revenue), ~921k parcels.
+kind: parcels
+name: Montana parcels
+type: arcgis
+url: https://gisservice.mt.gov/ArcGIS/rest/services/msdi_cadastral_map_v1/MapServer/1
+schedule: monthly
+counties: all
+countyField: CountyName
+attribution: Montana Cadastral Framework, Montana State Library
+license: Public; not suitable for legal, engineering, or surveying purposes
+terms: https://msl.mt.gov/geoinfo/msdi/cadastral/
+idField: OBJECTID
+fields:
+  parcel_id: PARCELID
+  owner: OwnerName
+  mail_address: "{OwnerAddress1}, {OwnerCity} {OwnerState} {OwnerZipCode}"
+  site_address: "{AddressLine1}, {CityStateZip}"
+  acres: GISAcres
+  total_value: TotalValue
+  land_value: TotalLandValue
+  use: PropType
+  legal: LegalDescriptionShort
+  county: CountyName

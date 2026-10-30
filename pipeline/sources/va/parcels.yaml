@@ -1,0 +1,16 @@
+# VGIN Virginia Parcels, ~4.17M parcels. Not every locality publishes digital parcels, and
+# boundaries are not edge-matched across localities.
+kind: parcels
+name: Virginia parcels
+type: arcgis
+url: https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0
+schedule: quarterly
+counties: all
+countyField: LOCALITY
+attribution: Virginia Geographic Information Network (VGIN)
+license: Cartographic use only; not a legal description or survey
+terms: https://vgin.vdem.virginia.gov/
+idField: OBJECTID
+fields:
+  parcel_id: PARCELID
+  county: LOCALITY

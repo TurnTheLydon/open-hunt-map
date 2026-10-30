@@ -1,0 +1,23 @@
+# Arkansas GIS Office (GeoStor) CAMA parcels, ~2.15M parcels. The service returns at most
+# 200 features per request, so a full fetch takes ~11k requests.
+kind: parcels
+name: Arkansas parcels
+type: arcgis
+url: https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Planning_Cadastre/FeatureServer/6
+schedule: semiannual
+counties: all
+countyField: county
+concurrency: 8
+attribution: Arkansas GIS Office
+license: Not a legal boundary description under Arkansas law
+terms: https://gis.arkansas.gov/
+idField: objectid
+fields:
+  parcel_id: parcelid
+  owner: ownername
+  site_address: "{adrlabel}, {adrcity}"
+  total_value: totalvalue
+  land_value: landvalue
+  use: parceltype
+  legal: parcellgl
+  county: county

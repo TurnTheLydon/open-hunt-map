@@ -1,0 +1,4 @@
+name: Wisconsin
+# Review the data terms (https://www.sco.wisc.edu/parcels/data/) before enabling.
+enabled: false
+bbox: [-92.89, 42.49, -86.25, 47.31]

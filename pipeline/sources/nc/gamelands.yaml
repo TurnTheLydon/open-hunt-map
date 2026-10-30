@@ -1,0 +1,27 @@
+# NCWRC game land tracts. Boundaries are approximate per NCWRC.
+kind: gamelands
+name: North Carolina game lands
+type: arcgis
+url: https://services1.arcgis.com/YfqBAUM5nWR3yhGP/ArcGIS/rest/services/gamelands_detail/FeatureServer/22
+schedule: monthly
+attribution: NC Wildlife Resources Commission
+license: Free download; boundaries are approximate
+terms: https://ncwildlife.gov/gamelands
+regulations: https://ncwildlife.gov/gamelands
+idField: OBJECTID
+fields:
+  name: GML_HAB
+  tract: GML_TRACT
+  type: GML_TYPE
+  owner: GML_OWN
+  status: GML_STATUS
+  days: GML_DESIG
+  target_shooting: TARGET_SHOOT
+  acres: ACRES
+  county: COUNTY
+  region: REGION
+# Spelling variants in the source data.
+values:
+  days:
+    Permit Only: Permit-only
+    Three-day-per-week: Three-days-per-week
